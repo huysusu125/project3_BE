@@ -10,6 +10,7 @@ import com.project.backend.repository.RoleRepository;
 import com.project.backend.repository.UserRepository;
 import com.project.backend.service.UserService;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
+@RequiredArgsConstructor
 @Transactional
 @Slf4j
 public class UserServiceImpl implements UserService, UserDetailsService {
@@ -33,21 +35,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUserName(username);
+        log.info("user: {}", username);
+        User user = userRepository.findByUsername(username);
         if (user == null) {
-            log.error("User not found: {}" + username);
+            log.error("User not found: {}1" + username);
             throw new UsernameNotFoundException("User not found: " + username);
         }
         log.info("User found");
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         user.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
-        return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassword(), authorities);
-    }
-
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, UserMapper userMapper) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.userMapper = userMapper;
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
     }
 
     @Override
@@ -80,13 +77,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void addRoleToUser(String userName, String roleName) {
-        User user = userRepository.findByUserName(userName);
+        User user = userRepository.findByUsername(userName);
         Role role = roleRepository.findByName(roleName);
     }
 
     @Override
     public UserDTO findByUserName(String userName) {
-        User user = userRepository.findByUserName(userName);
+        User user = userRepository.findByUsername(userName);
         return userMapper.toDTO(user);
     }
 
