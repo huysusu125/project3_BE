@@ -10,7 +10,7 @@ public interface UserService {
     UserDTO saveUser(UserDTO userDTO);
     RoleDTO saveRole(RoleDTO roleDTO);
     void addRoleToUser(String userName, String roleName);
-
+    UserDTO findById(long id);
     UserDTO findByUserName(String userName);
     List<UserDTO> findAll();
 }

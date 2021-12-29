@@ -82,6 +82,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    public UserDTO findById(long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return userMapper.toDTO(user);
+    }
+
+    @Override
     public UserDTO findByUserName(String userName) {
         User user = userRepository.findByUsername(userName);
         return userMapper.toDTO(user);
