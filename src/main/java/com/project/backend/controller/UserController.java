@@ -1,5 +1,6 @@
 package com.project.backend.controller;
 
+import com.project.backend.dto.HistoryDTO;
 import com.project.backend.dto.UserDTO;
 import com.project.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -26,5 +27,9 @@ public class UserController {
         return ResponseEntity.ok(userService.findById(id));
     }
 
+    @PostMapping("/history")
+    public void addHistory(HistoryDTO history) {
+        userService.addHistory(history);
+    }
 
 }

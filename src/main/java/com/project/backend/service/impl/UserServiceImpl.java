@@ -1,11 +1,16 @@
 package com.project.backend.service.impl;
 
 import com.project.backend.constain.RoleName;
+import com.project.backend.dto.HistoryDTO;
 import com.project.backend.dto.RoleDTO;
 import com.project.backend.dto.UserDTO;
+import com.project.backend.entity.History;
+import com.project.backend.entity.Location;
 import com.project.backend.entity.Role;
 import com.project.backend.entity.User;
 import com.project.backend.mapper.UserMapper;
+import com.project.backend.repository.HistoryRepository;
+import com.project.backend.repository.LocationRepository;
 import com.project.backend.repository.RoleRepository;
 import com.project.backend.repository.UserRepository;
 import com.project.backend.service.UserService;
@@ -32,7 +37,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final UserMapper userMapper;
-
+    private final LocationRepository locationRepository;
+    private final HistoryRepository historyRepository;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("user: {}", username);
@@ -101,6 +107,18 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             userDTOList.add(userMapper.toDTO(user));
         });
         return userDTOList;
+    }
+
+    @Override
+    public void addHistory(HistoryDTO historyDTO) {
+        User user = userRepository.findById(historyDTO.getUserId()).orElse(null);
+        Location location = locationRepository.findById(historyDTO.getLocationId()).orElse(null);
+        History history = History
+                .builder()
+                .user(user)
+                .location(location)
+                .build();
+        historyRepository.save(history);
     }
 
 

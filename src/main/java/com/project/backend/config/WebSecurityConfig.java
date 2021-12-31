@@ -1,5 +1,6 @@
 package com.project.backend.config;
 
+import com.project.backend.constain.RoleName;
 import com.project.backend.filter.CustomAuthenticationFilter;
 import com.project.backend.filter.CustomAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
@@ -38,8 +39,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(STATELESS);
         http.authorizeRequests().antMatchers("/public-api/**").permitAll();
-        http.authorizeRequests().antMatchers(GET, "/api/user/**").hasAnyAuthority("ROLE_USER");
-        http.authorizeRequests().antMatchers(POST, "/api/user/save/**").hasAnyAuthority("ROLE_ADMIN");
+        http.authorizeRequests().antMatchers(GET, "/api/user/**").hasAnyAuthority(RoleName.USER);
+        http.authorizeRequests().antMatchers(POST, "/api/location/**").hasAnyAuthority(RoleName.OWNER_LOCATION);
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(customAuthenticationFilter);
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);

@@ -1,5 +1,9 @@
 package com.project.backend.dto;
 
-public class HistoryDTO {
+import lombok.Data;
 
+@Data
+public class HistoryDTO {
+    Long userId;
+    Long locationId;
 }

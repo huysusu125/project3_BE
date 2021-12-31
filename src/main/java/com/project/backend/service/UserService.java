@@ -1,5 +1,6 @@
 package com.project.backend.service;
 
+import com.project.backend.dto.HistoryDTO;
 import com.project.backend.dto.RoleDTO;
 import com.project.backend.dto.UserDTO;
 
@@ -13,4 +14,6 @@ public interface UserService {
     UserDTO findById(long id);
     UserDTO findByUserName(String userName);
     List<UserDTO> findAll();
+
+    void addHistory(HistoryDTO history);
 }
